@@ -5,6 +5,8 @@ class ObstacleManager extends Entity {
         this.obstacles = [];
         this.spawnCooldown = 0;
         this.spawnDelay = 0.9; // base delay when not sprinting
+        this.totalSpawned = 0;
+        this.maxObstaclesToWin = 50;
 
         // Ground line for obstacles. Will be initialized once from the
         // player's starting position, then treated as a fixed point.
@@ -22,6 +24,16 @@ class ObstacleManager extends Entity {
         const canvasWidth = this.game.ctx ? this.game.ctx.canvas.width : 900;
         const spawnX = canvasWidth + 60;
         const isBlock = Math.random() < 0.5;
+
+        this.totalSpawned++;
+
+        // Trigger win condition once enough obstacles have spawned.
+        if (this.totalSpawned >= this.maxObstaclesToWin &&
+            this.game &&
+            typeof this.game.winGame === "function" &&
+            this.game.gameState === "playing") {
+            this.game.winGame();
+        }
 
         if (isBlock) {
             return new BreakableBlock(this.game, spawnX, this.groundY - 60, 60, 60);

@@ -3,7 +3,7 @@ class Spike extends Entity {
         super(gameEngine, x, y, width, height);
         this.speed = 260;
         this.hasHitPlayer = false;
-        this.damage = 25;
+        this.damage = 1;
 
         this.animator = new Animator(
             ASSET_MANAGER.getAsset("./sprites/spike.png"),

@@ -3,7 +3,7 @@ class BreakableBlock extends Entity {
         super(gameEngine, x, y, width, height);
         this.broken = false;
         this.speed = 260;
-        this.damage = 20;
+        this.damage = 1;
         this.hasDamagedPlayer = false;
 
         this.animator = new Animator(

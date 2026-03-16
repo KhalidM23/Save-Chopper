@@ -20,7 +20,7 @@ class GameEngine {
             debugging: false,
         };
 
-        this.gameState = "menu"; // "menu" | "playing" | "help"
+        this.gameState = "menu"; // "menu" | "playing" | "help" | "dead" | "won"
         this.timeAlive = 0;
         this.score = 0;
         this.highScore = 0;
@@ -201,6 +201,20 @@ class GameEngine {
         this.gameState = "menu";
     };
 
+    winGame() {
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+        }
+        this.gameState = "won";
+    };
+
+    dieGame() {
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+        }
+        this.gameState = "dead";
+    };
+
     drawMenu() {
         const ctx = this.ctx;
         const canvas = ctx.canvas;
@@ -325,6 +339,9 @@ class GameEngine {
         } else if (this.gameState === "help") {
             this.drawHelp();
             return;
+        } else if (this.gameState === "dead" || this.gameState === "won") {
+            this.drawEndScreen(this.gameState === "dead" ? "You Died!" : "You Won!");
+            return;
         }
 
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -338,7 +355,9 @@ class GameEngine {
         if (this.gameState !== "playing") return;
 
         this.timeAlive += this.clockTick;
-        this.score += this.clockTick * 100;
+        const streak = this.player ? (this.player.avoidStreak || 0) : 0;
+        const multiplier = 1 + 0.2 * streak;
+        this.score += this.clockTick * 100 * multiplier;
 
         let entitiesCount = this.entities.length;
 
@@ -362,6 +381,36 @@ class GameEngine {
         this.update();
         this.draw();
     };
+
+    drawEndScreen(message) {
+        const ctx = this.ctx;
+        const canvas = ctx.canvas;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+
+        ctx.font = "bold 40px 'Courier New', monospace";
+        ctx.fillText(message, canvas.width / 2, canvas.height * 0.35);
+
+        ctx.font = "22px 'Courier New', monospace";
+        ctx.fillText(`Score: ${Math.floor(this.score)}`, canvas.width / 2, canvas.height * 0.45);
+        ctx.fillText(`Best: ${Math.floor(this.highScore)}`, canvas.width / 2, canvas.height * 0.50);
+
+        ctx.font = "20px 'Courier New', monospace";
+        ctx.fillText("Click anywhere to return to menu", canvas.width / 2, canvas.height * 0.62);
+
+        ctx.restore();
+
+        if (this.click) {
+            this.gameState = "menu";
+            this.click = null;
+        }
+    }
 
 };
 

@@ -9,7 +9,7 @@ class chopper extends Entity {
         this.backgroundNumber = 1;
         this.cooldown = 0;
 
-        this.maxHealth = 100;
+        this.maxHealth = 6;
         this.health = this.maxHealth;
         this.invulnTimer = 0;
 
@@ -39,8 +39,8 @@ class chopper extends Entity {
         this.avoidStreak = 0;
         this.canSprint = false;
         this.sprintTimer = 0;
-        if (this.health <= 0 && this.game && typeof this.game.endGame === "function") {
-            this.game.endGame();
+        if (this.health <= 0 && this.game && typeof this.game.dieGame === "function") {
+            this.game.dieGame();
         }
     }
 
