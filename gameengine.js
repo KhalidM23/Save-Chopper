@@ -317,12 +317,11 @@ class GameEngine {
         line("W or Up Arrow  : Jump");
         line("F : Punch (break Thwomp blocks)");
         line("Avoid spikes at all costs.");
-        y += 10;
         line("Build streak by passing 5 obstacles without taking damage");
         line("to unlock Sprint for 10 seconds.");
-        line("Hold Shift while Sprint is READY to run faster and jump higher.");
-        y += 10;
-        line("Score increases as you survive longer.");
+        line("Hold Shift while Sprint is READY to become STRONGER.");
+        line("Survive until 50 obstacles have spawned.");
+        line("Score increases as you survive.");
 
         ctx.restore();
 
